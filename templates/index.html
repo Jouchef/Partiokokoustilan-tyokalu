@@ -1,14 +1,13 @@
 <title>Kolon työkalu</title>
 
-<header>
-    
-
-</header>
-
-
-
 <body>
     <h1>Tervetuloa kolon työkaluun!!</h1><br>
+
+    {% if session.username %}
+
+    <a href="/logout>">Kirjaudu ulos</a>
+
+
     <table>
         <tr>
             <td> 
@@ -19,6 +18,8 @@
             <td> <button> <a href="/inventaario">Inventaarioon</a> </button> </td>
         </tr>
     </table>
+
+    {% endif %}
 </body>
 
 <br>
