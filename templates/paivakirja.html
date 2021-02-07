@@ -1,0 +1,33 @@
+<title>Kolopäiväkirja</title>
+<header>
+    <a href="/">kotisivulle</a>
+  </header>
+
+
+
+<body>
+    <h1>Kalenterimerkinnät</h1><br>
+    <table style="text-align: left;">
+        <thead>
+            <th>Päivämäärä</th>
+            <th>Merkintä</th>
+            <th>Kirjoittaja</th>
+        </thead>
+        <tbody>
+            {% for merkinta in merkinnat %}
+            <tr>
+                <td>{{merkinta[1]}}</td>
+                <td>{{merkinta[2]}}</td>
+                <td>{{merkinta[3]}}</td>
+                <td>
+                    <form action="/poistakmerkinta" method="POST">
+                    <input type="text" name="poistettavaid" value="{{ merkinta[0] }}" hidden>
+                    <input type="submit" value="poista">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table> <br>
+    <a href="/uusikalenterimerkinta"> Uusi merkintä </a>
+</body>
