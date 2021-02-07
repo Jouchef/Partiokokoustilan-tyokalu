@@ -5,22 +5,46 @@ In Finland, most scouts call their meeting place "kolo". In english it would be 
 
 
 All the planned features listed:
-1. Ability to register user to web app.
-2. User can be moderator, or normal user
-3. Normal user is able to lend items from inventory. 
+1. Ability to register user to web app. (Almost ready. Now is possible to create username which somebody else has already taken.)
+2. User can be moderator, or normal user (ready)
+3. Normal user is able to lend items from inventory. (Not yet started)
   3.1. How long? What items? How many? who lends?
-  3.2. User can easily search item by its name or description.
-4. Normal user is able to add "kolo-activity" to "kolo-diary". This diary will be a form.
-  4.1. For example: ("24.1.2021, 1 man, 2 women, 10 boys, 9 girls")
-5. Administrator have the ability to accept user registering requests, because this system will be closed to specific people.
-6. Administrator have the ability to make normal user administrator and administrator to normal user.
-7. Admins are able to delete and add users.
-8. Admins are able to update inventory lists.
-  8.1. Item has name, description, location and amount of them. (maybe picture)
-9. Admins are able to print summary from "kolo-diary" for the use of the Rastipartio ry board.
+  3.2. User can easily search item by its name or description. (Not yet started)
+4. Normal user is able to add "kolo-activity" to "kolo-diary". This diary will be a form. (This is ready)
+  4.1. For example: ("24.1.2021, 1 man, 2 women, 10 boys, 9 girls") (This will be created separately from diary.)
+5. Administrator have the ability to accept user registering requests, because this system will be closed to specific people. (admin is able to delete users, in future only users with @rastipartio.fi emails will be able to register.)
+6. Administrator have the ability to make normal user administrator and administrator to normal user. (ready)
+7. Admins are able to delete and add users. (Almost ready)
+8. Admins are able to update inventory lists. (ready)
+  8.1. Item has name, description, location and amount of them. (maybe picture) (almost ready)
+9. Admins are able to print summary from "kolo-diary" for the use of the Rastipartio ry board. (Not yet started)
 
 
 These may be done:
 1. Normal user will be able to make a request for example that "There is no toilet paper" and this will be listed in a Requests-page.
   1.1. If someone fulfills this request, they are able to delete the request.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+
+# A BIT OF BACKGROUND
+
+- I wasn't sure if this should be written in english or finnish, so I wrote this in english just in case.
+- I have not yet done anything about the looks of the app, so sorry for that!
+- I'm not sure if the Chrome warning about password breach is problem with my app?
+- This is my very first html-project.
+- At the moment, all the python-code is in one py-file. I will try to change that later when I have all the features done.
+
+
+# INSTRUCTIONS FOR TESTING
+
+You are able to test the app in the following url: https://partiotyokalu.herokuapp.com/
+
+Register normal user from the front page. Tho normal user dont yet have much available tasks, but they are on the way!
+If you want to test super admins account you can do so by logging in with:
+  un: sadmin@sadmin.sadmin
+  pw: sadmin
+
+You may also change normal users role to admin and see how that works.
 
