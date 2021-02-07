@@ -1,7 +1,7 @@
 <title>Kolopäiväkirja</title>
 <header>
     <a href="/">kotisivulle</a>
-  </header>
+</header>
 
 
 
@@ -20,14 +20,20 @@
                 <td>{{merkinta[2]}}</td>
                 <td>{{merkinta[3]}}</td>
                 <td>
+                    {% if session["rooli"] in ["sadmin", "admin"] %}
                     <form action="/poistakmerkinta" method="POST">
                     <input type="text" name="poistettavaid" value="{{ merkinta[0] }}" hidden>
                     <input type="submit" value="poista">
                     </form>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table> <br>
     <a href="/uusikalenterimerkinta"> Uusi merkintä </a>
+
+
+
+
 </body>

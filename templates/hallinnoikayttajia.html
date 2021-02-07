@@ -1,0 +1,68 @@
+
+<header>
+    <a href="/">kotisivulle</a>
+    <p>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
+    <h1>Käyttäjien hallinnointi</h1>
+</header>
+
+<body>
+    <p>Super admin voi hallita kaikkea sivulla</p>
+    <p>Admin ei voi hallita käyttäjiä, mutta voi nähdä nämä tiedot.</p>
+    <p>User ei voi näiden lisäksi muokata inventaariota tai poistaa kalenterimerkintöjä</p>
+    <p>User voi </p>
+    <hr>
+    <table style="text-align: left;">
+        <th>
+            Käyttäjänimi:
+        </th>
+        <th>
+            Rooli:
+        </th>
+        {% if session["rooli"] in ["sadmin"] %}
+        <th>
+            muuta roolia:
+        </th>
+        {% endif %}
+        {% for kayttaja in tiedot %}
+            {% if kayttaja[0] != session["id"] %}
+                <tr>
+                    <td>
+                        {{ kayttaja[1] }}
+                    </td>
+                    <td>
+                        {{ kayttaja[2] }}
+                    </td>
+                    <td>
+                        {% if session["rooli"] in ["sadmin"] %}
+                        <form action="/muutaroolia" method="POST">
+                            <input type="text" name="id" value={{ kayttaja[0] }} hidden>
+                            <select class="form-control" name="roolit" style="width: 100px;">
+                                <option selected value={{ kayttaja[2] }}>{{ kayttaja[2] }}</option>
+                                <option value="sadmin">sadmin</option>
+                                <option value="admin">admin</option>
+                                <option value="user">user</option>
+                            </select>
+                            <input type="submit" value="Muuta">
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        {% for kayttaja in tiedot %}
+            {% if kayttaja[0] == session["id"] %}
+                <tr>
+                    <td>
+                        {{ kayttaja[1] }}
+                    </td>
+                    <td>
+                        {{ kayttaja[2] }}
+                    </td>
+                    <td>
+                        <p><b>Ei muuttaa omaa roolia.</b></p>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</body>

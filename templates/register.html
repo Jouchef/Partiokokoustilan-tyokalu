@@ -1,0 +1,22 @@
+<header>
+    <a href="/">kotisivulle</a>
+    <p>
+        <br>
+    </p>
+</header>
+
+<body>
+    <h4>Rekisteröidy tässä:</h4>
+    <p>Älä käytä tässä mitään oikeita salasanojasi!</p>
+    <p>lomake ei lähetä sähköpostiin viestiä.</p>
+    <p>Nyt kuka vain voi tehdä käyttäjän, mutta tämä muuttuu niin, että vain @rastipartio.fi päättyisillä osoitteilla voi tehdä käyttäjän.</p>
+    <form action="/register" method="POST">
+        <label for="username">Käyttäjänimi:</label>
+        <input type="email" required name="username"><br>
+
+        <label for="password">Salasana:</label>
+        <input type="password" required name="password"><br>
+
+        <input type="submit" value="Rekisteröidy">
+    </form>
+</body>

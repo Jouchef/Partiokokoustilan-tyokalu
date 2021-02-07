@@ -1,14 +1,19 @@
 <title>Kolon työkalu</title>
 
+<header>
+    {% if session.username %}
+    <p><b>Kirjautuneena:</b> {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
+    {% endif %}
+</header>
+
 <body>
-    <h1>Tervetuloa kolon työkaluun!!</h1><br>
+    <h1>Tervetuloa partiokolon työkaluun!!</h1>
 
     {% if session.username %}
+    <hr>
 
-    <a href="/logout>">Kirjaudu ulos</a>
-
-
-    <table>
+    <table style="text-align: left;">
+        <th>Mitä haluat tehdä:</th>
         <tr>
             <td> 
                 <button> <a href="/paivakirja">Kirjaa päiväkirjamerkintä</a> </button>
@@ -17,7 +22,40 @@
         <tr>
             <td> <button> <a href="/inventaario">Inventaarioon</a> </button> </td>
         </tr>
+        {% if session["rooli"] in ["sadmin", "admin"] %}
+        <tr>
+            <td> <button> <a href="/hallinnoikayttajia">Hallinnoi Käyttäjiä</a> </button> </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td>
+                <p>#UNDER CONSTRUCTION#</p>
+                <p><i>Lisätään mahdollisuus tehdä huoltopyyntöjä. Esim. "Vessapaperi on loppu"</i></p>
+            </td>
+        </tr>
     </table>
+
+    {% else %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p><i>{{msg}}</i></p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <p>Käyttääksesi palvelua kirjaudu sisään:</p>
+    <form action="/login" method="POST">
+    <label for="username">Käyttäjänimi:</label>
+    <input type="text" name="username"><br>
+
+    <label for="password">Salasana:</label>
+    <input type="password" name="password"><br>
+
+    <input type="submit" value="Kirjaudu">
+    </form>
+    <br>
+    <p>Eikö sinulla ole tunnusta? Rekisteröidy tästä:</p>
+    <a href="/registerinput">Rekisteröidy</a>
 
     {% endif %}
 </body>

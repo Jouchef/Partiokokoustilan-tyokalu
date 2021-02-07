@@ -1,12 +1,13 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <header>
   <a href="/">kotisivulle</a>
+  <p>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
 </header>
 
 
 <title>Kolon inventaario</title>
 
 <h1>Kolon inventaario</h1>
+<p><i>Tähän lisätään käyttäjälle vielä mahdollisuus lainata tuotteita inventaariosta</i></p>
 
 <hr>
 
@@ -23,21 +24,26 @@
       <td>{{ tuote[1] }}</td>
       <td>{{ tuote[2] }}</td>
       <td>
+        {% if session["rooli"] in ["sadmin", "admin"] %}
         <form action="/inventaario" method="POST">
-            <input type="text" name="id" id="id" value="{{ tuote[3] }}" hidden/>
-            <input type="submit" value="poista"/>
+          <input type="text" name="id" id="id" value="{{ tuote[3] }}" hidden/>
+          <input type="submit" value="poista"/>
         </form>
+        {% endif %}
       </td>
       <td>
+        {% if session["rooli"] in ["sadmin", "admin"] %}
         <form action="/varasto/{{ tuote[3] }}" method="POST">
           <input type="submit" value="muokkaa"/>
         </form>
+        {% endif %}
       </td>
     </tr>
     {% endfor %}
   </table>
 <hr>
 
+{% if session["rooli"] in ["sadmin", "admin"] %}
 <h3>Lisää tuote:</h3>
 <form action="/inventaario" method="POST">
 
@@ -54,6 +60,7 @@
     <input type="submit" value="Submit">
 
   </form> 
+  {% endif %}
 
 
 
