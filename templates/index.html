@@ -43,13 +43,14 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+
     <p>Käyttääksesi palvelua kirjaudu sisään:</p>
     <form action="/login" method="POST">
     <label for="username">Käyttäjänimi:</label>
-    <input type="text" name="username"><br>
+    <input type="text" name="username" required><br>
 
     <label for="password">Salasana:</label>
-    <input type="password" name="password"><br>
+    <input type="password" name="password" required><br>
 
     <input type="submit" value="Kirjaudu">
     </form>

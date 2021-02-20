@@ -13,10 +13,10 @@
     <p>Lisäksi tällä hetkellä on mahdollista luoda monta käyttäjää samalla nimellä.</p>
     <form action="/register" method="POST">
         <label for="username">Käyttäjänimi:</label>
-        <input type="email" required name="username"><br>
+        <input type="email" required name="username" minlength="5"><br>
 
         <label for="password">Salasana:</label>
-        <input type="password" required name="password"><br>
+        <input type="password" required name="password" minlength="5"><br>
 
         <input type="submit" value="Rekisteröidy">
     </form>

@@ -32,20 +32,21 @@
                     <td>
                         {{ kayttaja[2] }}
                     </td>
-                    <td>
-                        {% if session["rooli"] in ["sadmin"] %}
-                        <form action="/muutaroolia" method="POST">
-                            <input type="text" name="id" value={{ kayttaja[0] }} hidden>
-                            <select class="form-control" name="roolit" style="width: 100px;">
-                                <option selected value={{ kayttaja[2] }}>{{ kayttaja[2] }}</option>
-                                <option value="sadmin">sadmin</option>
-                                <option value="admin">admin</option>
-                                <option value="user">user</option>
-                            </select>
-                            <input type="submit" value="Muuta">
-                        </form>
-                        {% endif %}
-                    </td>
+                    {% if session["rooli"] in ["sadmin"] %}
+                        <td>
+                            <form action="/muutaroolia" method="POST">
+                                <input type="text" name="id" value={{ kayttaja[0] }} hidden>
+                                <select class="form-control" name="roolit" style="width: 100px;">
+                                    <option selected value={{ kayttaja[2] }}>{{ kayttaja[2] }}</option>
+                                    <option value="sadmin">sadmin</option>
+                                    <option value="admin">admin</option>
+                                    <option value="user">user</option>
+                                </select>
+                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                                <input type="submit" value="Muuta">
+                            </form>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endif %}
         {% endfor %}
@@ -59,7 +60,7 @@
                         {{ kayttaja[2] }}
                     </td>
                     <td>
-                        <p><b>Ei muuttaa omaa roolia.</b></p>
+                        <p><b>Ei voi muuttaa omaa roolia.</b></p>
                     </td>
                 </tr>
             {% endif %}

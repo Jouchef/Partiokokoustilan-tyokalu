@@ -6,6 +6,8 @@ from sqlalchemy import sql
 from os import getenv
 from sqlalchemy.sql.elements import Null
 from functools import wraps
+import os
+from werkzeug.exceptions import abort
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
@@ -31,24 +33,25 @@ def index():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    #Tarkistetaan tunnukset
+    """Tarkistetaan tunnukset"""
     sql = "SELECT id, password, role FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     print(user)    
     if user == None:
-        #väärä käyttäjänimi
+        """väärä käyttäjänimi"""
         flash("Väärä käyttäjänimi!")
     else:
         hash_value = user[1]
         if check_password_hash(hash_value,password):
-            #Oikeat tunnukset
+            """Oikeat tunnukset"""
             session["username"] = username
             session["rooli"] = user[2]
             session["id"] = user[0]
+            session["csrf_token"] = os.urandom(16).hex()
 
         else:
-            #väärä salasana
+            """väärä salasana"""
             flash("Väärä salasana!")
     
     return redirect("/")
@@ -59,7 +62,7 @@ def logout():
     del session["username"]
     return redirect("/")
 
-@app.route("/register", methods=["POST", "GET"])
+@app.route("/register", methods=["POST"])
 def register():
     username = request.form["username"]
     password = request.form["password"]
@@ -69,7 +72,7 @@ def register():
     db.session.commit()
     return redirect("/")
 
-@app.route("/registerinput", methods=["POST", "GET"])
+@app.route("/registerinput", methods=["GET"])
 def registerinput():
     return render_template("register.html")
 
@@ -78,11 +81,15 @@ def registerinput():
 def inventaario():
     if request.method == "POST":
         if "id" in request.form:
+            if session["csrf_token"] != request.form["csrf_token"]:
+                abort(403)
             id = request.form["id"]
             sql2 = "DELETE FROM tavaralistaus WHERE id = :id"
             db.session.execute(sql2, {"id":id})
             db.session.commit()
         else:
+            if session["csrf_token"] != request.form["csrf_token"]:
+                abort(403)
             tuote = request.form["tuote"]
             kuvaus = request.form["kuvaus"]
             maara = request.form["maara"]
@@ -107,6 +114,8 @@ def hallinnoikayttajia():
 @app.route("/muutaroolia", methods=["POST"])
 @autGuard
 def muutaroolia():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     role = request.form["roolit"]
     id = request.form["id"]
     sql = "UPDATE users SET role=:role WHERE id=:id"
@@ -118,6 +127,8 @@ def muutaroolia():
 @app.route("/varasto/<int:id>", methods=["GET", "POST"])
 @autGuard
 def poll(id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     sql = "SELECT * FROM tavaralistaus WHERE id=:id"
     tulos = db.session.execute(sql, {"id":id})
     rivi = tulos.fetchall()
@@ -126,6 +137,8 @@ def poll(id):
 @app.route("/paivitatuote", methods=["POST"])
 @autGuard
 def paivitatuote():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     tuote = request.form["tuote"]
     kuvaus = request.form["kuvaus"]
     maara = request.form["maara"]
@@ -154,6 +167,8 @@ def uusikalenterimerkinta():
 @app.route("/lahetakmerkinta", methods=["POST"])
 @autGuard
 def lahetakmerkinta():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     merkinta = request.form["merkinta"]
     kirjoittaja = request.form["kirjoittaja"]
     sql = "INSERT INTO paivakirja (merkinta, kukakirjoitti) VALUES(:merkinta, :kirjoittaja)"
@@ -164,6 +179,8 @@ def lahetakmerkinta():
 @app.route("/poistakmerkinta", methods=["POST"])
 @autGuard
 def poistakmerkinta():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     poistettava = request.form["poistettavaid"]
     sql = "DELETE FROM paivakirja WHERE id = :poistettava"
     db.session.execute(sql, {"poistettava":poistettava})

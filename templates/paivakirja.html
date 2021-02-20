@@ -23,6 +23,7 @@
                     {% if session["rooli"] in ["sadmin", "admin"] %}
                     <form action="/poistakmerkinta" method="POST">
                     <input type="text" name="poistettavaid" value="{{ merkinta[0] }}" hidden>
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     <input type="submit" value="poista">
                     </form>
                     {% endif %}

@@ -27,6 +27,7 @@
         {% if session["rooli"] in ["sadmin", "admin"] %}
         <form action="/inventaario" method="POST">
           <input type="text" name="id" id="id" value="{{ tuote[3] }}" hidden/>
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
           <input type="submit" value="poista"/>
         </form>
         {% endif %}
@@ -35,6 +36,7 @@
         {% if session["rooli"] in ["sadmin", "admin"] %}
         <form action="/varasto/{{ tuote[3] }}" method="POST">
           <input type="submit" value="muokkaa"/>
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
         {% endif %}
       </td>
@@ -55,6 +57,8 @@
 
     <label for="maara">Määrä:</label><br>
     <input type="number" id="maara" name="maara"><br><br>
+    
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     
 
     <input type="submit" value="Submit">
