@@ -25,13 +25,13 @@
             </thead>
             <tr>
                 <td>
-                    <input type="text" name="tuote" value={{ rivi[0][0] }} required>
+                    <input type="text" name="tuote" value={{ rivi[0][0] }} required minlength="4" maxlength="20">
                 </td>
                 <td>
-                    <input type="text" name="kuvaus" value={{ rivi[0][1] }} required>
+                    <input type="text" name="kuvaus" value={{ rivi[0][1] }} required minlength="4" maxlength="30">
                 </td>
                 <td>
-                    <input type="number" name="maara" value={{ rivi[0][2] }} required min="0">
+                    <input type="number" name="maara" value={{ rivi[0][2] }} required min="0" max="200">
                     <input type="number" name="id" value={{ rivi[0][3] }} hidden required>
                 </td>
             </tr>

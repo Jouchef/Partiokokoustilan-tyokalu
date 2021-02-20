@@ -15,10 +15,10 @@
 <form action="/lahetakmerkinta" method="POST">
 
     <label for="merkinta">Kalenterimerkintä:</label><br>
-    <textarea id="1"name="merkinta" rows="2" cols="40" required minlength="8"></textarea><br><br>
+    <textarea id="1"name="merkinta" rows="2" cols="40" required minlength="8" maxlength="80"></textarea><br><br>
 
     <label for="kirjoittaja">Kirjoittaja:</label><br>
-    <textarea id="2" name="kirjoittaja" rows="1" cols="40" required minlength="3"></textarea><br><br>
+    <textarea id="2" name="kirjoittaja" rows="1" cols="40" required minlength="3" maxlength="15"></textarea><br><br>
 
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Lähetä">
