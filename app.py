@@ -67,6 +67,14 @@ def register():
     username = request.form["username"]
     password = request.form["password"]
     hash_value = generate_password_hash(password)
+    sqlnimet = "SELECT username FROM users"
+    names = (db.session.execute(sqlnimet)).fetchall()
+    for name in names:
+        print(name[0])
+        if username == name[0]:
+            flash("Tämä käyttäjänimi on jo käytössä. Valitse joku toinen.")
+            return render_template("register.html", username=username, password=password)
+
     sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
     db.session.execute(sql, {"username":username,"password":hash_value})
     db.session.commit()

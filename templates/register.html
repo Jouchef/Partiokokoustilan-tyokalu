@@ -11,12 +11,21 @@
     <p>lomake ei lähetä sähköpostiin viestiä.</p>
     <p>Nyt kuka vain voi tehdä käyttäjän, mutta tämä muuttuu niin, että vain @rastipartio.fi päättyisillä osoitteilla voi tehdä käyttäjän.</p>
     <p>Lisäksi tällä hetkellä on mahdollista luoda monta käyttäjää samalla nimellä.</p>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <p><i>{{msg}}</i></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
     <form action="/register" method="POST">
         <label for="username">Käyttäjänimi:</label>
-        <input type="email" required name="username" minlength="5"><br>
+        <input type="email" required value="{{ username }}" name="username" minlength="5"><br>
 
         <label for="password">Salasana:</label>
-        <input type="password" required name="password" minlength="5"><br>
+        <input type="password" required name="password" value="{{ password }}" minlength="5"><br>
 
         <input type="submit" value="Rekisteröidy">
     </form>
