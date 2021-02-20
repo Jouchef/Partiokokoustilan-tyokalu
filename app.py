@@ -2,12 +2,12 @@ from flask import Flask,request, flash
 from flask import redirect, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
-from sqlalchemy import sql
-from os import getenv
-from sqlalchemy.sql.elements import Null
-from functools import wraps
-import os
 from werkzeug.exceptions import abort
+from sqlalchemy import sql
+from sqlalchemy.sql.elements import Null
+import os
+from os import getenv
+from functools import wraps
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
@@ -128,6 +128,17 @@ def muutaroolia():
     id = request.form["id"]
     sql = "UPDATE users SET role=:role WHERE id=:id"
     db.session.execute(sql, {"role":role, "id":id})
+    db.session.commit()
+    return redirect("/hallinnoikayttajia")
+
+@app.route("/poistakayttaja", methods=["POST"])
+@autGuard
+def poistakayttaja():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    id = request.form["id"]
+    sql = "DELETE FROM users WHERE id = :id"
+    db.session.execute(sql, {"id":id})
     db.session.commit()
     return redirect("/hallinnoikayttajia")
 

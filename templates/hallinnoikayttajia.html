@@ -20,7 +20,10 @@
         </th>
         {% if session["rooli"] in ["sadmin"] %}
         <th>
-            muuta roolia:
+            Muuta roolia:
+        </th>
+        <th>
+            Poista käyttäjä:
         </th>
         {% endif %}
         {% for kayttaja in tiedot %}
@@ -44,6 +47,13 @@
                                 </select>
                                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                                 <input type="submit" value="Muuta">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/poistakayttaja" method="POST">
+                                <input type="text" name="id" value={{ kayttaja[0] }} hidden>
+                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                                <input type="submit" value="Poista">
                             </form>
                         </td>
                     {% endif %}
