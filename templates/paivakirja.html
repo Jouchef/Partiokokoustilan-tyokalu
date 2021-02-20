@@ -1,6 +1,10 @@
 <title>Kolopäiväkirja</title>
 <header>
     <a href="/">kotisivulle</a>
+    <p>
+        Kirjautuneena: {{ session.username }}
+        <a href="/logout">Kirjaudu ulos</a>
+      </p>
 </header>
 
 
@@ -20,7 +24,7 @@
                 <td>{{merkinta[2]}}</td>
                 <td>{{merkinta[3]}}</td>
                 <td>
-                    {% if session["rooli"] in ["sadmin", "admin"] %}
+                    {% if session["role"] in ["sadmin", "admin"] %}
                     <form action="/poistakmerkinta" method="POST">
                     <input type="text" name="poistettavaid" value="{{ merkinta[0] }}" hidden>
                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">

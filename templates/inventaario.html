@@ -1,3 +1,5 @@
+
+
 <title>Inventaario</title>
 <header>
   <a href="/">kotisivulle</a>
@@ -16,7 +18,7 @@
       <th>tuote:</th>
       <th>kuvaus:</th>
       <th>määrä:</th>
-      {% if session["rooli"] in ["sadmin", "admin"] %}
+      {% if session["role"] in ["sadmin", "admin"] %}
       <th>poista:</th>
       <th>muokkaa:</th>
       {% endif %}
@@ -26,7 +28,7 @@
       <td>{{ tuote[0] }}</td>
       <td>{{ tuote[1] }}</td>
       <td>{{ tuote[2] }}</td>
-      {% if session["rooli"] in ["sadmin", "admin"] %}
+      {% if session["role"] in ["sadmin", "admin"] %}
       <td>
         <form action="/inventaario" method="POST">
           <input type="text" name="id" id="id" value="{{ tuote[3] }}" hidden/>
@@ -46,7 +48,7 @@
   </table>
 <hr>
 
-{% if session["rooli"] in ["sadmin", "admin"] %}
+{% if session["role"] in ["sadmin", "admin"] %}
 <h3>Lisää tuote:</h3>
 <form action="/inventaario" method="POST">
 

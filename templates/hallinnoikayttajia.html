@@ -1,10 +1,23 @@
-<title>Käyttäjien hallinnointi</title>
+
+<head>
+    <title>Käyttäjien hallinnointi</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+</head>
+
 <header>
-    <a href="/">kotisivulle</a>
-    <p>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
+    <tr>
+        <td><a href="/">kotisivulle</a></td>
+        <td>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a></td>
+    </tr>
+    
+    
     <h1>Käyttäjien hallinnointi</h1>
 </header>
 
+{% if session["role"] in ["sadmin", "admin"] %}
 <body>
     <summary>
         <p>Super admin voi hallita kaikkea sivulla</p>
@@ -21,9 +34,9 @@
         <th>
             Rooli:
         </th>
-        {% if session["rooli"] in ["sadmin"] %}
+        {% if session["role"] in ["sadmin"] %}
         <th>
-            Muuta roolia:
+            Muuta rolea:
         </th>
         <th>
             Poista käyttäjä:
@@ -38,7 +51,7 @@
                     <td>
                         {{ kayttaja[2] }}
                     </td>
-                    {% if session["rooli"] in ["sadmin"] %}
+                    {% if session["role"] in ["sadmin"] %}
                         <td>
                             <form action="/muutaroolia" method="POST">
                                 <input type="text" name="id" value={{ kayttaja[0] }} hidden>
@@ -80,3 +93,4 @@
         {% endfor %}
     </table>
 </body>
+{% endif %}

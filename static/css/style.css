@@ -1,5 +1,33 @@
-p {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 30px;
-    color: black;
+.header-container p {
+    color:rgb(49, 49, 49);
+    margin: 10px;
+}
+
+.virheviesti {
+    color: red;
+    padding: 10px;
+}
+
+
+a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+    margin: 10px;
+}
+
+h2 {
+    padding: 8px;
+}
+
+* {
+  text-align: center;
+  margin: auto;
 }
