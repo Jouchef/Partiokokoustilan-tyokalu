@@ -31,7 +31,7 @@ VALUES ('Tulitikku', 'Aski', 100);
 
 
 CREATE TABLE users
-(id SERIAL PRIMARY KEY, username TEXT, password TEXT, role TEXT DEFAULT 'user');
+(id SERIAL PRIMARY KEY, username TEXT UNIQUE, password TEXT, role TEXT );
 
 INSERT INTO users (username, password, role)
 VALUES ('sadmin@sadmin.sadmin', 'pbkdf2:sha256:150000$RycREZON$f1a586c9cf0c62d9973854972684c4505c9f18161635ff39f3dc379cd9232b32', 'sadmin');

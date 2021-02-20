@@ -7,27 +7,12 @@ from sqlalchemy import sql
 from sqlalchemy.sql.elements import Null
 import os
 from os import getenv
-from functools import wraps
 from authCheck import autGuard, adminGuard, sadminGuard
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.secret_key = getenv("SECRET_KEY")
 db = SQLAlchemy(app)
-
-"""
-def autGuard(f):
-    @wraps(f)
-    def checklogin(*args, **kwargs):
-        username = session.get("username", "null")
-        if username == "null":
-            flash("Kirjaudu sisään käyttääksesi sivustoa")
-            return redirect("/")
-        return f(*args, **kwargs)
-
-    return checklogin"""
-
-
 
 
 @app.route("/")
@@ -196,10 +181,10 @@ def paivakirja():
     return render_template("paivakirja.html", merkinnat=merkinnat)
 
 
-@app.route("/uusikalenterimerkinta", methods=["POST", "GET"])
+@app.route("/uusikalenterimerkinta", methods=["GET"])
 @autGuard
 def uusikalenterimerkinta():
-    return render_template("uusikalenterimerkinta.html", )
+    return render_template("uusikalenterimerkinta.html")
 
 
 @app.route("/lahetakmerkinta", methods=["POST"])
@@ -226,3 +211,23 @@ def poistakmerkinta():
     db.session.execute(sql, {"poistettava": poistettava})
     db.session.commit()
     return redirect("/paivakirja")
+
+@app.route("/kavijalaskuri", methods=["GET"])
+@autGuard
+def kavijalaskuri():
+    return render_template("kavijalaskuri.html")
+
+@app.route("/paivitakavijalaskuri", methods=["POST"])
+@autGuard
+def paivitakavijalaskuri():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    poika = request.form["poika"]
+    tytto = request.form["tytto"]
+    mies = request.form["mies"]
+    nainen = request.form["nainen"]
+    sql = "INSERT INTO laskuri (poika, tytto, mies, nainen) VALUES (:poika, :tytto, :mies, :nainen)"
+    db.session.execute(sql, {"poika": poika, "tytto": tytto, "mies": mies, "nainen": nainen})
+    db.session.commit()
+    flash("Lisättiin kävijöihin onnistuneesti tiedot")
+    return redirect("/")

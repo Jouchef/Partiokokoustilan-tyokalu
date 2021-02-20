@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Kolon kävijälaskuri</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <header class="header-container">
+    <tr>
+      <td><a href="/">kotisivulle</a></td>
+      <td>
+        Kirjautuneena: {{ session.username }}
+        <a href="/logout">Kirjaudu ulos</a>
+      </td>
+    </tr>
+
+    <h1>Kolon kävijälaskuri</h1>
+  </header>
+
+  <body>
+      <form action="/paivitakavijalaskuri" method="POST">
+      <table>
+          <thead>
+              <th><label for="poika">Poikia:</label></th>
+              <th><label for="tytto">Tyttöjä:</label></th>
+              <th><label for="mies">Miehiä:</label></th>
+              <th><label for="nainen">Naisia:</label></th>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>
+                      <input type="number" id="poika" required value="0" min="0" max="100" class="numero" style="width: 40px;">
+                  </td>
+                  <td>
+                    <input type="number" id="tytto" required value="0" min="0" max="100" class="numero" style="width: 40px;">
+                </td>
+                <td>
+                    <input type="number" id="mies" required value="0" min="0" max="100" class="numero" style="width: 40px;">
+                </td>
+                <td>
+                    <input type="number" id="nainen" required value="0" min="0" max="100" class="numero" style="width: 40px;">
+                </td>
+              </tr>
+          </tbody>
+      </table>
+      <input type="submit" value="Lähetä"
+    </form>
+  </body>
+</html>
