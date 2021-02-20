@@ -50,13 +50,13 @@
 <form action="/inventaario" method="POST">
 
     <label for="tuote">Tuote:</label><br>
-    <input type="text" id="tuote" name="tuote"><br>
+    <input type="text" id="tuote" name="tuote" required><br>
 
     <label for="kuvaus">Kuvaus:</label><br>
-    <input type="text" id="kuvaus" name="kuvaus"><br>
+    <input type="text" id="kuvaus" name="kuvaus" required><br>
 
     <label for="maara">Määrä:</label><br>
-    <input type="number" id="maara" name="maara"><br><br>
+    <input type="number" id="maara" name="maara" required min="1"><br><br>
     
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     
