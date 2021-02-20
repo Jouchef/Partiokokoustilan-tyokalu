@@ -1,19 +1,25 @@
+<!DOCTYPE html>
+<html>
 <title>Kolon työkalu</title>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
 
 <header>
     {% if session.username %}
-    <p><b>Kirjautuneena:</b> {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
+    <p>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
     {% endif %}
 </header>
 
 <body>
-    <h1>Tervetuloa partiokolon työkaluun!!</h1>
+    <h1>Tervetuloa partiokolon työkaluun!</h1>
 
     {% if session.username %}
     <hr>
 
     <table style="text-align: left;">
-        <th>Mitä haluat tehdä:</th>
+        <th><h2>Mitä haluat tehdä:</h2></th>
         <tr>
             <td> 
                 <button> <a href="/paivakirja">Kirjaa päiväkirjamerkintä</a> </button>
@@ -39,7 +45,7 @@
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for msg in messages %}
-                <p><i>{{msg}}</i></p>
+                <p class="virheviesti"><i>{{msg}}</i></p>
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -60,5 +66,4 @@
 
     {% endif %}
 </body>
-
-<br>
+</html>

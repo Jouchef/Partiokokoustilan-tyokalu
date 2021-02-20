@@ -19,7 +19,7 @@ def autGuard(f):
     def checklogin(*args, **kwargs):
         username = session.get("username", "null")
         if  username == "null":
-            flash("Sinulla ei ole lupaa kyseiselle sivulle.")
+            flash("Kirjaudu sisään käyttääksesi sivustoa")
             return redirect("/")
         return f(*args, **kwargs)
 
@@ -37,7 +37,6 @@ def login():
     sql = "SELECT id, password, role FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
-    print(user)    
     if user == None:
         """väärä käyttäjänimi"""
         flash("Väärä käyttäjänimi!")

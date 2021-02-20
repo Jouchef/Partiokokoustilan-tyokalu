@@ -1,10 +1,9 @@
+<title>Inventaario</title>
 <header>
   <a href="/">kotisivulle</a>
   <p>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
 </header>
 
-
-<title>Kolon inventaario</title>
 
 <h1>Kolon inventaario</h1>
 <p><i>Tähän lisätään käyttäjälle vielä mahdollisuus lainata tuotteita inventaariosta</i></p>
@@ -16,30 +15,32 @@
     <tr>
       <th>tuote:</th>
       <th>kuvaus:</th>
-      <th>maara</th>
+      <th>määrä:</th>
+      {% if session["rooli"] in ["sadmin", "admin"] %}
+      <th>poista:</th>
+      <th>muokkaa:</th>
+      {% endif %}
     </tr>
     {% for tuote in tuotteet %}
     <tr>
       <td>{{ tuote[0] }}</td>
       <td>{{ tuote[1] }}</td>
       <td>{{ tuote[2] }}</td>
+      {% if session["rooli"] in ["sadmin", "admin"] %}
       <td>
-        {% if session["rooli"] in ["sadmin", "admin"] %}
         <form action="/inventaario" method="POST">
           <input type="text" name="id" id="id" value="{{ tuote[3] }}" hidden/>
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
           <input type="submit" value="poista"/>
         </form>
-        {% endif %}
       </td>
       <td>
-        {% if session["rooli"] in ["sadmin", "admin"] %}
         <form action="/varasto/{{ tuote[3] }}" method="POST">
           <input type="submit" value="muokkaa"/>
           <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
-        {% endif %}
       </td>
+      {% endif %}
     </tr>
     {% endfor %}
   </table>
