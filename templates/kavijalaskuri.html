@@ -17,35 +17,77 @@
     </tr>
 
     <h1>Kolon kävijälaskuri</h1>
+    {% with messages = get_flashed_messages() %} 
+    {% if messages %} 
+    <tr><td> 
+      {% for msg in messages %}
+      <p class="virheviesti"><i>{{msg}}</i></p>
+      {% endfor %} {% endif %} {% endwith %}
   </header>
 
   <body>
-      <form action="/paivitakavijalaskuri" method="POST">
+    <form action="/paivitakavijalaskuri" method="POST">
       <table>
-          <thead>
-              <th><label for="poika">Poikia:</label></th>
-              <th><label for="tytto">Tyttöjä:</label></th>
-              <th><label for="mies">Miehiä:</label></th>
-              <th><label for="nainen">Naisia:</label></th>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>
-                      <input type="number" id="poika" required value="0" min="0" max="100" class="numero" style="width: 40px;">
+        <tbody>
+            <tr>
+                <td><label for="ryhma">Ryhmä:</label></td>
+                <td>
+                    <input type="text" name=ryhma required minlength="1" maxlength="30" style="text-align: left;" value={{ryhma}}>
                   </td>
-                  <td>
-                    <input type="number" id="tytto" required value="0" min="0" max="100" class="numero" style="width: 40px;">
-                </td>
+
+            </tr>
+            <tr>
+                <td><label for="pvm">Pvm:</label></td>
                 <td>
-                    <input type="number" id="mies" required value="0" min="0" max="100" class="numero" style="width: 40px;">
-                </td>
+                    <input type="date" min="2021-01-01" max= {{dmy}} name="pvm" value= {{ dmy }} required>
+                  </td>
+            </tr>
+            <tr>
+                <td><label for="nuoria">Nuoria (0-28v.):</label></td>
                 <td>
-                    <input type="number" id="nainen" required value="0" min="0" max="100" class="numero" style="width: 40px;">
-                </td>
-              </tr>
-          </tbody>
+                    <input type="number" name="nuoria" required value={{ nuoria }} min="0" max="100" class="numero" style="width: 40px">
+                  </td>
+            </tr>
+            <tr>
+                <td><label for="aikuisia">Yli 28-vuotiaita:</label></td>
+                <td>
+                    <input type="number" name="aikuisia" required value={{ aikuisia }} min="0" max="100" class="numero" style="width: 40px">
+                  </td>
+            </tr>
+            <tr>
+                <td><label for="ulkopaikkakuntalainen">Joista ei helsinkiläisiä:</label></td>
+                <td>
+                    <input type="number" name="ulkopaikkakuntalainen" required value= {{ ulkopaikkakuntalainen }} min="0" max="100" class="numero" style="width: 40px">
+                  </td>
+            </tr>
+        </tbody>
       </table>
-      <input type="submit" value="Lähetä"
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+      <input type="submit" value="Lähetä">
     </form>
+
+    <h2>Viimeiset 30 käyntiä:</h2>
+    <table>
+        <thead>
+            <th>Ryhmä:</th>
+            <th>Pvm:</th>
+            <th>Alle 29-vuotias:</th>
+            <th>Yli 28-vuotias:</th>
+            <th>Ei Helsingistä:</th>
+        </thead>
+        <tbody>
+            {% for kaynti in kaynnit %}
+
+            <tr>
+                <td> {{ kaynti[0] }} </td>
+                <td>{{ kaynti[1] }}</td>
+                <td>{{ kaynti[2] }}</td>
+                <td>{{ kaynti[3] }}</td>
+                <td>{{ kaynti[4] }}</td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
   </body>
 </html>

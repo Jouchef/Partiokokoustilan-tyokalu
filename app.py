@@ -8,6 +8,7 @@ from sqlalchemy.sql.elements import Null
 import os
 from os import getenv
 from authCheck import autGuard, adminGuard, sadminGuard
+import datetime
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
@@ -212,22 +213,39 @@ def poistakmerkinta():
     db.session.commit()
     return redirect("/paivakirja")
 
+
 @app.route("/kavijalaskuri", methods=["GET"])
 @autGuard
 def kavijalaskuri():
-    return render_template("kavijalaskuri.html")
+    now = datetime.datetime.now()
+    year = '{:02d}'.format(now.year)
+    month = '{:02d}'.format(now.month)
+    day = '{:02d}'.format(now.day)
+    dmy = '{}-{}-{}'.format(year, month, day)
+    ryhma = ""
+    nuoria = 0
+    aikuisia = 0
+    ulkopaikkakuntalainen = 0
+    tulos = db.session.execute("SELECT ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen FROM laskuri ORDER BY id DESC LIMIT 30")
+    kaynnit = tulos.fetchall()
+    return render_template("kavijalaskuri.html", dmy=dmy, ryhma=ryhma, nuoria=nuoria, aikuisia=aikuisia, ulkopaikkakuntalainen=ulkopaikkakuntalainen, kaynnit=kaynnit)
 
 @app.route("/paivitakavijalaskuri", methods=["POST"])
 @autGuard
 def paivitakavijalaskuri():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
-    poika = request.form["poika"]
-    tytto = request.form["tytto"]
-    mies = request.form["mies"]
-    nainen = request.form["nainen"]
-    sql = "INSERT INTO laskuri (poika, tytto, mies, nainen) VALUES (:poika, :tytto, :mies, :nainen)"
-    db.session.execute(sql, {"poika": poika, "tytto": tytto, "mies": mies, "nainen": nainen})
+    ryhma = request.form["ryhma"]
+    pvm = request.form["pvm"]
+    print("päivämäärä: ", pvm)
+    nuoria = request.form["nuoria"]
+    aikuisia = request.form["aikuisia"]
+    ulkopaikkakuntalainen = request.form["ulkopaikkakuntalainen"]
+    if ulkopaikkakuntalainen > nuoria + aikuisia:
+        flash("Ulkopaikkakuntalaisia ei voi olla enempää kuin kävijöitä yhteensä.")
+        return render_template("kavijalaskuri.html", dmy=pvm, ryhma=ryhma, nuoria=nuoria, aikuisia=aikuisia, ulkopaikkakuntalainen=ulkopaikkakuntalainen)
+    sql = "INSERT INTO laskuri (ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen) VALUES (:ryhma, :pvm, :nuoria, :aikuisia, :ulkopaikkakuntalainen)"
+    db.session.execute(sql, {"ryhma": ryhma, "pvm": pvm, "nuoria": nuoria, "aikuisia": aikuisia, "ulkopaikkakuntalainen": ulkopaikkakuntalainen})
     db.session.commit()
-    flash("Lisättiin kävijöihin onnistuneesti tiedot")
-    return redirect("/")
+    flash("Kolokäynti lisätty onnistuneesti.")
+    return redirect("/kavijalaskuri")

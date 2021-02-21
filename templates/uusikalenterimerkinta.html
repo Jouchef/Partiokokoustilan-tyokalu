@@ -1,10 +1,22 @@
-<title>Uusi kalenterimerkintä</title>
+
+
+<head>
+    <title>Uusi kalenterimerkintä</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+</head>
 
 <header>
     <table>
         <tr>
             <td> <a href="/">kotisivulle</a> </td>
-            <td> <a href="/paivakirja">takaisin paivakirjaan</a> </td>
+            <p>
+                Kirjautuneena: {{ session.username }}
+                <a href="/logout">Kirjaudu ulos</a>
+              </p>
+            <td> <a href="/paivakirja">päiväkirjaan</a> </td>
         </tr>
     </table>
     
