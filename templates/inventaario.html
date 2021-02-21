@@ -1,75 +1,80 @@
 
+<head>
+  <title>Inventaario</title>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+  />
+</head>
 
-<title>Inventaario</title>
-<header>
-  <a href="/">kotisivulle</a>
-  <p>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a> </p>
+<header class="header-container">
+  <tr>
+      <td><a href="/">kotisivulle</a></td>
+      <td>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a></td>
+  </tr>
+  <h1>Kolon inventaario</h1>
 </header>
 
+<body>
+  <p><i>Tähän lisätään mahdollisesti ominaisuus lainata tuotteita inventaariosta</i></p>
 
-<h1>Kolon inventaario</h1>
-<p><i>Tähän lisätään käyttäjälle vielä mahdollisuus lainata tuotteita inventaariosta</i></p>
+  <table>
+      <thead>
+        <th>tuote:</th>
+        <th>kuvaus:</th>
+        <th>määrä:</th>
+        {% if session["role"] in ["sadmin", "admin"] %}
+        <th>poista:</th>
+        <th>muokkaa:</th>
+        {% endif %}
+      </thead>
+      {% for tuote in tuotteet %}
+      <tr>
+        <td>{{ tuote[0] }}</td>
+        <td>{{ tuote[1] }}</td>
+        <td>{{ tuote[2] }}</td>
+        {% if session["role"] in ["sadmin", "admin"] %}
+        <td>
+          <form action="/inventaario" method="POST">
+            <input type="text" name="id" id="id" value="{{ tuote[3] }}" hidden/>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="submit" value="poista"/>
+          </form>
+        </td>
+        <td>
+          <form action="/varasto/{{ tuote[3] }}" method="POST">
+            <input type="submit" value="muokkaa"/>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+          </form>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  <hr>
 
-<hr>
+  {% if session["role"] in ["sadmin", "admin"] %}
+  <h3>Lisää tuote:</h3>
+  <form action="/inventaario" method="POST">
 
+      <label for="tuote">Tuote:</label><br>
+      <input type="text" id="tuote" name="tuote" required minlength="4" maxlength="20"><br>
 
-<table style="width:100%;text-align: left;">
-    <tr>
-      <th>tuote:</th>
-      <th>kuvaus:</th>
-      <th>määrä:</th>
-      {% if session["role"] in ["sadmin", "admin"] %}
-      <th>poista:</th>
-      <th>muokkaa:</th>
-      {% endif %}
-    </tr>
-    {% for tuote in tuotteet %}
-    <tr>
-      <td>{{ tuote[0] }}</td>
-      <td>{{ tuote[1] }}</td>
-      <td>{{ tuote[2] }}</td>
-      {% if session["role"] in ["sadmin", "admin"] %}
-      <td>
-        <form action="/inventaario" method="POST">
-          <input type="text" name="id" id="id" value="{{ tuote[3] }}" hidden/>
-          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-          <input type="submit" value="poista"/>
-        </form>
-      </td>
-      <td>
-        <form action="/varasto/{{ tuote[3] }}" method="POST">
-          <input type="submit" value="muokkaa"/>
-          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        </form>
-      </td>
-      {% endif %}
-    </tr>
-    {% endfor %}
-  </table>
-<hr>
+      <label for="kuvaus">Kuvaus:</label><br>
+      <input type="text" id="kuvaus" name="kuvaus" required minlength="4" maxlength="30"><br>
 
-{% if session["role"] in ["sadmin", "admin"] %}
-<h3>Lisää tuote:</h3>
-<form action="/inventaario" method="POST">
+      <label for="maara">Määrä:</label><br>
+      <input type="number" id="maara" name="maara" required min="0" max="200"><br><br>
 
-    <label for="tuote">Tuote:</label><br>
-    <input type="text" id="tuote" name="tuote" required minlength="4" maxlength="20"><br>
-
-    <label for="kuvaus">Kuvaus:</label><br>
-    <input type="text" id="kuvaus" name="kuvaus" required minlength="4" maxlength="30"><br>
-
-    <label for="maara">Määrä:</label><br>
-    <input type="number" id="maara" name="maara" required min="0" max="200"><br><br>
-    
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    
-
-    <input type="submit" value="Submit">
-
-  </form> 
-  {% endif %}
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 
 
+      <input type="submit" value="Submit">
 
+    </form> 
+    {% endif %}
+
+
+</body>
 
 

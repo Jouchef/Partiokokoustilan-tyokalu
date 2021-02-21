@@ -1,6 +1,15 @@
-<title>Rekisteröityminen</title>
-<header>
-    <a href="/">kotisivulle</a>
+
+
+<head>
+    <title>Rekisteröityminen</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+<header class="header-container">
+    <a href="/">takaisin kotisivulle</a>
     <p>
         <br>
     </p>
@@ -8,9 +17,12 @@
 
 <body>
     <h4>Rekisteröidy tässä:</h4>
-    <p>Älä käytä tässä mitään oikeita salasanojasi!</p>
-    <p>lomake ei lähetä sähköpostiin viestiä.</p>
-    <p>Nyt kuka vain voi tehdä käyttäjän, mutta tämä muuttuu niin, että vain @rastipartio.fi päättyisillä osoitteilla voi tehdä käyttäjän.</p>
+    <summary>
+        <p>Älä käytä tässä mitään oikeita salasanojasi!</p>
+        <p>lomake ei lähetä sähköpostiin viestiä.</p>
+        <p>Nyt kuka vain voi tehdä käyttäjän, mutta tämä muuttuu niin, että vain @rastipartio.fi päättyisillä osoitteilla voi tehdä käyttäjän.</p>
+    </summary>
+    
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -27,6 +39,6 @@
         <label for="password">Salasana:</label>
         <input type="password" required name="password" value="{{ password }}" minlength="5"><br>
 
-        <input type="submit" value="Rekisteröidy">
+        <input type="submit" value="Rekisteröidy" style="margin-top: 10px;">
     </form>
 </body>

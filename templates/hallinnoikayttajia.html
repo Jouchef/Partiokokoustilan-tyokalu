@@ -20,13 +20,12 @@
 {% if session["role"] in ["sadmin", "admin"] %}
 <body>
     <summary>
-        <p>Super admin voi hallita kaikkea sivulla</p>
-        <p>Admin ei voi hallita käyttäjiä, mutta voi nähdä nämä tiedot.</p>
-        <p>User ei voi näiden lisäksi muokata inventaariota tai poistaa kalenterimerkintöjä</p>
-        <p>User voi luoda kalenterimerkintöjä ja tarkkailla inventaariota.</p>
+        <p><b>Super admin</b> voi hallita kaikkea sivulla</p>
+        <p><b>Admin</b> ei voi hallita käyttäjiä, mutta voi nähdä nämä tiedot.</p>
+        <p><b>User</b> ei voi näiden lisäksi muokata inventaariota tai poistaa kalenterimerkintöjä</p>
+        <p><b>User</b> voi luoda kalenterimerkintöjä ja tarkkailla inventaariota.</p>
     </summary>
 
-    <hr>
     <table style="text-align: left;">
         <th>
             Käyttäjänimi:

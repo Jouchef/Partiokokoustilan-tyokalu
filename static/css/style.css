@@ -1,10 +1,9 @@
-.header-container p {
+.header-container a {
     color:rgb(49, 49, 49);
-    margin: 10px;
+    margin-top: 10px;
 }
 
 .virheviesti {
-    color: red;
     padding: 10px;
 }
 
@@ -35,6 +34,10 @@ h2 {
 td {
   padding-top: 4px;
   padding-bottom: 4px;
+}
+
+summary {
+  padding: 15px;
 }
 
 * {

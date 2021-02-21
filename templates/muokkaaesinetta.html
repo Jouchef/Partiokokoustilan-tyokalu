@@ -1,13 +1,22 @@
-<title>Esineen muokkaus</title>
-<header>
+<head>
+    <title>Esineen muokkaus</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+<header class="header-container">
     <table>
-        <tr>
-            <td> <a href="/">kotisivulle</a> </td>
-            <td> <a href="/inventaario">takaisin inventaarioon</a> </td>
-        </tr>
+            <th>
+                <td>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a></td>
+            </th>
+            <tr>
+                <td><a href="/">kotisivulle</a></td>
+                <td> <a href="/inventaario">takaisin inventaarioon</a> </td>
+            </tr>
     </table>
-    <br>
-  </header>
+</header>
 
   <body>
       <h1>Muokkaa tuotteen tietoja:</h1>
