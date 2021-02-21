@@ -31,7 +31,7 @@ VALUES ('Tulitikku', 'Aski', 100);
 
 
 CREATE TABLE users
-(id SERIAL PRIMARY KEY, username TEXT UNIQUE, password TEXT, role TEXT );
+(id SERIAL PRIMARY KEY, username TEXT UNIQUE, password TEXT, role TEXT);
 
 INSERT INTO users (username, password, role)
 VALUES ('sadmin@sadmin.sadmin', 'pbkdf2:sha256:150000$RycREZON$f1a586c9cf0c62d9973854972684c4505c9f18161635ff39f3dc379cd9232b32', 'sadmin');
@@ -47,10 +47,10 @@ CREATE TABLE laskuri
 (id SERIAL PRIMARY KEY, realpvm DATE DEFAULT CURRENT_DATE, ryhma TEXT, pvm DATE, nuoria INTEGER, aikuisia INTEGER, ulkopaikkakuntalainen INTEGER);
 
 INSERT INTO laskuri (ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen)
-VALUES ("Ryhmä A", "2021-02-21", 10, 2, 1);
+VALUES ('Ryhmä A', '2021-02-21', 10, 2, 1);
 
 INSERT INTO laskuri (ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen)
-VALUES ("Tulitähdet", "2021-02-20", 13, 3, 0);
+VALUES ('Tulitähdet', '2021-02-20', 13, 3, 0);
 
 INSERT INTO laskuri (ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen)
-VALUES ("Puumat", "2021-02-19", 9, 2, 0);
+VALUES ('Puumat', '2021-02-19', 9, 2, 0);
