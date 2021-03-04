@@ -11,11 +11,18 @@
     
     <body>
         <header>
-            <a href="/">kotisivulle</a>
-            <p>
-                Kirjautuneena: {{ session.username }}
+            <div class="links-container">
+                <a class="logo-container" href="/">
+                    <img class="logo" src="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}" alt="Rastipartio logo">
+                </a>
+                <nav>
+                    <a href="/">kotisivulle</a>
+                </nav>
+            </div>
+            <div class="logout-container">
+                <p>Kirjautuneena: {{ session.username }}</p>
                 <a href="/logout">Kirjaudu ulos</a>
-              </p>
+            </div>
         </header>
         <main>
         <h1>Kalenterimerkinnät</h1>
@@ -24,9 +31,13 @@
         {% if messages %} 
         {% for msg in messages %}
         <p class="virheviesti"><i>{{msg}}</i></p>
-        {% endfor %} {% endif %} {% endwith %}<br>
+        {% endfor %} {% endif %} {% endwith %}
+        
+        <div class="linkki">
+            <a href="/uusikalenterimerkinta"> Tee uusi merkintä </a><br>
+        </div>
 
-        <table style="text-align: left;">
+        <table>
             <thead>
                 <th>Päivämäärä</th>
                 <th>Merkintä</th>
@@ -43,7 +54,7 @@
                         <form action="/poistakmerkinta" method="POST">
                         <input type="text" name="poistettavaid" value="{{ merkinta[0] }}" hidden>
                         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                        <input type="submit" value="poista">
+                        <input class="nappi" type="submit" value="poista">
                         </form>
                         {% endif %}
                     </td>
@@ -51,7 +62,6 @@
                 {% endfor %}
             </tbody>
         </table> <br>
-        <a href="/uusikalenterimerkinta"> Tee uusi merkintä </a>
 
     </main>
     </body>

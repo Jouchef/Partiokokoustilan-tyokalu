@@ -1,7 +1,7 @@
 from db import db
 
 def getDiary():
-    haku = db.session.execute("SELECT * FROM paivakirja")
+    haku = db.session.execute("SELECT * FROM paivakirja ORDER BY id DESC LIMIT 30")
     merkinnat = haku.fetchall()
     return merkinnat
 

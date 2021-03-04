@@ -1,12 +1,60 @@
+body {
+  font-family: sans-serif;
+  background: #f8f8f8;
+}
+
+* {
+  text-align: center;
+  margin: auto;
+}
+
 .header-container a {
-    color:rgb(49, 49, 49);
-    margin-top: 10px;
+  color: rgb(49, 49, 49);
+  margin-top: 10px;
+}
+
+header {
+  background: #daecf2;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header * {
+  margin: 0;
+}
+
+.logout-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.links-container {
+  display: flex;
+}
+
+.logo-container {
+  margin-right: 20px;
+}
+
+.logo {
+  height: 50px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .virheviesti {
-    padding: 10px;
+  padding: 10px;
 }
-
 
 a {
   color: black;
@@ -15,21 +63,24 @@ a {
   font-size: larger;
   padding-left: 3px;
   padding-right: 3px;
+  transition: opacity 300ms ease-out;
 }
 
-body {
-  font-family: sans-serif;
-  background: #F8F8F8;
+a:hover {
+  opacity: .5;
 }
+
 
 h1 {
-    margin: 10px;
+  margin: 10px;
+  color: rgb(29, 54, 63);
 }
 
 h2 {
-    padding: 8px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+  padding: 8px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: rgb(10, 36, 46);
 }
 
 td {
@@ -42,26 +93,45 @@ summary {
   padding: 15px;
 }
 
-* {
-  text-align: center;
-  margin: auto;
-}
 
 main {
-max-width: 900px;
+  max-width: 900px;
 
-background: #FFFFFF;
-/* Varjo */
+  background: #ffffff;
+  /* Varjo */
 
-box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  border-radius: 10px;
+}
+.linkki {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-header {
-  background: #DAECF2;
-/* Varjo */
+.nappi {
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 10px 16px;
+border: none;
+cursor: pointer;
+transition: color 300ms ease-out, background 300ms ease-out, border-radius 300ms ease-out, transform 300ms ease-out;
 
-box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-padding: 20px;
-margin-bottom: 40px;
+background: #000000;
+border-radius: 4px;
+
+/*teksti*/
+font-weight: 800;
+font-size: 12px;
+color: #FFFFFF;
 }
+
+.nappi:hover {
+  color: red;
+  background: green;
+  transform: translateY(2px);
+  border-radius: 500px;
+}
+
