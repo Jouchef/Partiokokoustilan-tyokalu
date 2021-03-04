@@ -11,6 +11,8 @@ from os import getenv
 from authCheck import autGuard, adminGuard, sadminGuard
 from db import db
 import users
+import inventory
+import diary
 import datetime
 
 #app = Flask(__name__)
@@ -29,9 +31,6 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
     """Tarkistetaan tunnukset"""
-    #sql = "SELECT id, password, role FROM users WHERE username=:username"
-    #result = db.session.execute(sql, {"username": username})
-    #user = result.fetchone()
     user = users.login(username)
     if user == None:
         """väärä käyttäjänimi"""
@@ -54,11 +53,11 @@ def login():
 
 @app.route("/logout")
 def logout():
-    flash("Kirjauduit onnistuneesti ulos.")
     del session["username"]
     del session["role"]
     del session["id"]
     del session["csrf_token"]
+    flash("Kirjauduit onnistuneesti ulos.")
     return redirect("/")
 
 
@@ -67,17 +66,14 @@ def register():
     username = request.form["username"]
     password = request.form["password"]
     hash_value = generate_password_hash(password)
-    sqlnimet = "SELECT username FROM users"
-    names = (db.session.execute(sqlnimet)).fetchall()
+    names = users.askUsernames()
     for name in names:
         print(name[0])
         if username == name[0]:
             flash("Tämä käyttäjänimi on jo käytössä. Valitse joku toinen.")
             return render_template("register.html", username=username, password=password)
-
-    sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
-    db.session.execute(sql, {"username": username, "password": hash_value})
-    db.session.commit()
+    users.addUser(username, password, hash_value)
+    flash("Käyttäjä rekisteröity onnistuneesti.")
     return redirect("/")
 
 
@@ -86,38 +82,10 @@ def registerinput():
     return render_template("register.html")
 
 
-@app.route("/inventaario", methods=["GET", "POST"])
-@autGuard
-def inventaario():
-    if request.method == "POST":
-        if "id" in request.form:
-            if session["csrf_token"] != request.form["csrf_token"]:
-                abort(403)
-            id = request.form["id"]
-            sql2 = "DELETE FROM tavaralistaus WHERE id = :id"
-            db.session.execute(sql2, {"id": id})
-            db.session.commit()
-        else:
-            if session["csrf_token"] != request.form["csrf_token"]:
-                abort(403)
-            tuote = request.form["tuote"]
-            kuvaus = request.form["kuvaus"]
-            maara = request.form["maara"]
-            sql1 = "INSERT INTO tavaralistaus (tuote, kuvaus, maara) VALUES(:tuote, :kuvaus, :maara)"
-            db.session.execute(
-                sql1, {"tuote": tuote, "kuvaus": kuvaus, "maara": maara})
-            db.session.commit()
-    sql = "SELECT tuote, kuvaus, maara, id FROM tavaralistaus"
-    result = db.session.execute(sql)
-    tuotteet = result.fetchall()
-    return render_template("inventaario.html", tuotteet=tuotteet)
-
-
 @app.route("/hallinnoikayttajia", methods=["GET"])
 @autGuard
 def hallinnoikayttajia():
-    sql = "SELECT id, username, role FROM users ORDER BY role DESC"
-    tiedot = (db.session.execute(sql)).fetchall()
+    tiedot = users.getUsersByRole()
     id = session["id"]
     return render_template("hallinnoikayttajia.html", tiedot=tiedot, id=id)
 
@@ -130,9 +98,7 @@ def muutaroolia():
         abort(403)
     role = request.form["roolit"]
     id = request.form["id"]
-    sql = "UPDATE users SET role=:role WHERE id=:id"
-    db.session.execute(sql, {"role": role, "id": id})
-    db.session.commit()
+    users.changeRole(role, id)
     return redirect("/hallinnoikayttajia")
 
 
@@ -143,10 +109,28 @@ def poistakayttaja():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
     id = request.form["id"]
-    sql = "DELETE FROM users WHERE id = :id"
-    db.session.execute(sql, {"id": id})
-    db.session.commit()
+    users.deleteUser(id)
     return redirect("/hallinnoikayttajia")
+
+
+@app.route("/inventaario", methods=["GET", "POST"])
+@autGuard
+def inventaario():
+    if request.method == "POST":
+        if "id" in request.form:
+            if session["csrf_token"] != request.form["csrf_token"]:
+                abort(403)
+            id = request.form["id"]
+            inventory.delItem(id)
+        else:
+            if session["csrf_token"] != request.form["csrf_token"]:
+                abort(403)
+            tuote = request.form["tuote"]
+            kuvaus = request.form["kuvaus"]
+            maara = request.form["maara"]
+            inventory.addItem(tuote, kuvaus, maara)
+    tuotteet = inventory.getItems()
+    return render_template("inventaario.html", tuotteet=tuotteet)
 
 
 @app.route("/varasto/<int:id>", methods=["GET", "POST"])
@@ -155,9 +139,7 @@ def poistakayttaja():
 def poll(id):
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
-    sql = "SELECT * FROM tavaralistaus WHERE id=:id"
-    tulos = db.session.execute(sql, {"id": id})
-    rivi = tulos.fetchall()
+    rivi = inventory.showItemInfo(id)
     return render_template("muokkaaesinetta.html", id=id, rivi=rivi)
 
 
@@ -171,18 +153,15 @@ def paivitatuote():
     kuvaus = request.form["kuvaus"]
     maara = request.form["maara"]
     id = request.form["id"]
-    sql = "UPDATE tavaralistaus SET tuote=:tuote, kuvaus=:kuvaus, maara=:maara WHERE id=:id"
-    db.session.execute(
-        sql, {"tuote": tuote, "kuvaus": kuvaus, "maara": maara, "id": id})
-    db.session.commit()
+    inventory.updateItem(tuote, kuvaus, maara, id)
+    flash("Tuote päivitetty onnistuneesti.")
     return redirect("/inventaario")
 
 
 @app.route("/paivakirja", methods=["GET", "POST"])
 @autGuard
 def paivakirja():
-    haku = db.session.execute("SELECT * FROM paivakirja")
-    merkinnat = haku.fetchall()
+    merkinnat = diary.getDiary()
     return render_template("paivakirja.html", merkinnat=merkinnat)
 
 
@@ -199,9 +178,8 @@ def lahetakmerkinta():
         abort(403)
     merkinta = request.form["merkinta"]
     kirjoittaja = request.form["kirjoittaja"]
-    sql = "INSERT INTO paivakirja (merkinta, kukakirjoitti) VALUES(:merkinta, :kirjoittaja)"
-    db.session.execute(sql, {"merkinta": merkinta, "kirjoittaja": kirjoittaja})
-    db.session.commit()
+    diary.newDiaryEntry(merkinta, kirjoittaja)
+    flash("Kalenterimerkintä lisätty onnistuneesti.")
     return redirect("/paivakirja")
 
 
@@ -212,9 +190,7 @@ def poistakmerkinta():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
     poistettava = request.form["poistettavaid"]
-    sql = "DELETE FROM paivakirja WHERE id = :poistettava"
-    db.session.execute(sql, {"poistettava": poistettava})
-    db.session.commit()
+    diary.delDiaryEntry(poistettava)
     return redirect("/paivakirja")
 
 
@@ -230,8 +206,7 @@ def kavijalaskuri():
     nuoria = 0
     aikuisia = 0
     ulkopaikkakuntalainen = 0
-    tulos = db.session.execute("SELECT ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen FROM laskuri ORDER BY id DESC LIMIT 30")
-    kaynnit = tulos.fetchall()
+    kaynnit = diary.getVisitors()
     return render_template("kavijalaskuri.html", dmy=dmy, ryhma=ryhma, nuoria=nuoria, aikuisia=aikuisia, ulkopaikkakuntalainen=ulkopaikkakuntalainen, kaynnit=kaynnit)
 
 @app.route("/paivitakavijalaskuri", methods=["POST"])
@@ -245,11 +220,11 @@ def paivitakavijalaskuri():
     nuoria = request.form["nuoria"]
     aikuisia = request.form["aikuisia"]
     ulkopaikkakuntalainen = request.form["ulkopaikkakuntalainen"]
-    if ulkopaikkakuntalainen > nuoria + aikuisia:
+    if ulkopaikkakuntalainen < (nuoria + aikuisia):
+        print("ulkopaikkakuntalainen: ", ulkopaikkakuntalainen, " nuoria: ", nuoria, " aikuisia: ", aikuisia)
         flash("Ulkopaikkakuntalaisia ei voi olla enempää kuin kävijöitä yhteensä.")
-        return render_template("kavijalaskuri.html", dmy=pvm, ryhma=ryhma, nuoria=nuoria, aikuisia=aikuisia, ulkopaikkakuntalainen=ulkopaikkakuntalainen)
-    sql = "INSERT INTO laskuri (ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen) VALUES (:ryhma, :pvm, :nuoria, :aikuisia, :ulkopaikkakuntalainen)"
-    db.session.execute(sql, {"ryhma": ryhma, "pvm": pvm, "nuoria": nuoria, "aikuisia": aikuisia, "ulkopaikkakuntalainen": ulkopaikkakuntalainen})
-    db.session.commit()
+        kaynnit = diary.getVisitors()
+        return render_template("kavijalaskuri.html", dmy=pvm, ryhma=ryhma, nuoria=nuoria, aikuisia=aikuisia, ulkopaikkakuntalainen=ulkopaikkakuntalainen, kaynnit=kaynnit)
+    diary.updateVisitors(ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen)
     flash("Kolokäynti lisätty onnistuneesti.")
     return redirect("/kavijalaskuri")

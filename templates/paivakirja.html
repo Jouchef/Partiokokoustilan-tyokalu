@@ -8,16 +8,24 @@
         />
     </head>
     
-    <header>
-        <a href="/">kotisivulle</a>
-        <p>
-            Kirjautuneena: {{ session.username }}
-            <a href="/logout">Kirjaudu ulos</a>
-          </p>
-    </header>
-
+    
     <body>
-        <h1>Kalenterimerkinnät</h1><br>
+        <header>
+            <a href="/">kotisivulle</a>
+            <p>
+                Kirjautuneena: {{ session.username }}
+                <a href="/logout">Kirjaudu ulos</a>
+              </p>
+        </header>
+        <main>
+        <h1>Kalenterimerkinnät</h1>
+
+        {% with messages = get_flashed_messages() %} 
+        {% if messages %} 
+        {% for msg in messages %}
+        <p class="virheviesti"><i>{{msg}}</i></p>
+        {% endfor %} {% endif %} {% endwith %}<br>
+
         <table style="text-align: left;">
             <thead>
                 <th>Päivämäärä</th>
@@ -45,5 +53,6 @@
         </table> <br>
         <a href="/uusikalenterimerkinta"> Tee uusi merkintä </a>
 
+    </main>
     </body>
 </html>
