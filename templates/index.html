@@ -10,7 +10,12 @@
 
   <body>
 
-    <header class="header-container">
+    <header>
+      <div class="links-container">
+        <a class="logo-container" href="/">
+            <img class="logo" src="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}" alt="Rastipartio logo">
+        </a>
+      </div>
       {% if session.username %}
       <p>
         Kirjautuneena: {{ session.username }}
@@ -56,17 +61,6 @@
         </td>
       </tr>
       {% endif %}
-      <tr>
-        <td>
-          <p>#UNDER CONSTRUCTION#</p>
-          <p>
-            <i
-              >Lisätään ehkä mahdollisuus tehdä huoltopyyntöjä. Lisätään ominaisuus vuoden kaikkien kolokäyntien exporttaamiseen.</i
-            >
-          </p>
-          <p>Ulkonäkö on vielä suuresti työn alla.</p>
-        </td>
-      </tr>
     </table>
 
     {% elif not session.username and not session.role %} 
@@ -78,15 +72,21 @@
     {% endfor %} {% endif %} {% endwith %}
 
     <p>Käyttääksesi palvelua kirjaudu sisään:</p>
-    <form action="/login" method="POST">
-      <label for="username">Käyttäjänimi:</label>
-      <input type="text" name="username" required /><br />
-
-      <label for="password">Salasana:</label>
-      <input type="password" name="password" required /><br />
-
-      <input type="submit" value="Kirjaudu" />
-    </form>
+    <div class="login-container">
+      <form action="/login" method="POST">
+        <div class="username-container">
+          <label for="username">Käyttäjänimi:</label>
+          <input type="text" name="username" required />
+        </div>
+        <div class="pw-container">
+          <label for="password">Salasana:</label>
+          <input type="password" name="password" required />
+        </div>
+        <div class="login-button">
+          <input type="submit" value="Kirjaudu" />
+        </div>
+      </form>
+    </div>
     <br />
     <p>Eikö sinulla ole tunnusta? Rekisteröidy tästä:</p>
     <a href="/registerinput">Rekisteröidy</a>

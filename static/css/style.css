@@ -52,6 +52,22 @@ nav {
   justify-content: center;
 }
 
+.login-container {
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  justify-content:space-between;
+  background-color: red;
+}
+
+.username-container, .pw-container {
+  padding-block-start: 0px;
+  padding-block-end: 0px;
+}
+
 .virheviesti {
   padding: 10px;
 }
@@ -134,4 +150,3 @@ color: #FFFFFF;
   transform: translateY(2px);
   border-radius: 500px;
 }
-
