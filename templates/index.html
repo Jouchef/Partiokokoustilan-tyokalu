@@ -6,6 +6,7 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}">
   </head>
 
   <body>
@@ -17,63 +18,65 @@
         </a>
       </div>
       {% if session.username %}
-      <p>
-        Kirjautuneena: {{ session.username }}
+      <div class="logout-container">
+        <p>Kirjautuneena: {{ session.username }}</p>
         <a href="/logout">Kirjaudu ulos</a>
-      </p>
+    </div>
       {% endif %}
     </header>
+    <main>
 
-    <h1>Tervetuloa partiokolon työkaluun!</h1>
-
-    {% if session.username and session.role %}
-
-    <table style="text-align: left">
-      <th>
-        <h2>Mitä haluat tehdä:</h2>
-      </th>
+      
+      <h1>Tervetuloa partiokolon työkaluun!</h1>
+      
+      {% if session.username and session.role %}
+      
+      <table style="text-align: left">
+        <th>
+          <h2>Mitä haluat tehdä:</h2>
+        </th>
+        {% with messages = get_flashed_messages() %} 
+        {% if messages %} 
+        <tr><td> 
+          {% for msg in messages %}
+          <p class="virheviesti"><i>{{msg}}</i></p>
+          {% endfor %} {% endif %} {% endwith %}
+        </td></tr>
+        <tr>
+          <td>
+            <button class="nappi"><a href="/kavijalaskuri">Lisää kolokäynti</a></button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button class="nappi"><a href="/paivakirja">Kirjaa päiväkirjamerkintä</a></button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button class="nappi"><a href="/inventaario">Inventaarioon</a></button>
+          </td>
+        </tr>
+        {% if session["role"] in ["sadmin", "admin"] %}
+        <tr>
+          <td>
+            <button class="nappi"><a href="/hallinnoikayttajia">Hallinnoi Käyttäjiä</a></button>
+          </td>
+        </tr>
+        {% endif %}
+      </table>
+      
+      {% elif not session.username and not session.role %} 
+      
       {% with messages = get_flashed_messages() %} 
       {% if messages %} 
-      <tr><td> 
-        {% for msg in messages %}
-        <p class="virheviesti"><i>{{msg}}</i></p>
-        {% endfor %} {% endif %} {% endwith %}
-      </td></tr>
-      <tr>
-        <td>
-          <button><a href="/kavijalaskuri">Lisää kolokäynti</a></button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button><a href="/paivakirja">Kirjaa päiväkirjamerkintä</a></button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button><a href="/inventaario">Inventaarioon</a></button>
-        </td>
-      </tr>
-      {% if session["role"] in ["sadmin", "admin"] %}
-      <tr>
-        <td>
-          <button><a href="/hallinnoikayttajia">Hallinnoi Käyttäjiä</a></button>
-        </td>
-      </tr>
-      {% endif %}
-    </table>
-
-    {% elif not session.username and not session.role %} 
-    
-    {% with messages = get_flashed_messages() %} 
-    {% if messages %} 
-    {% for msg in messages %}
-    <p class="virheviesti"><i>{{msg}}</i></p>
-    {% endfor %} {% endif %} {% endwith %}
-
-    <p>Käyttääksesi palvelua kirjaudu sisään:</p>
-    <div class="login-container">
+      {% for msg in messages %}
+      <p class="virheviesti"><i>{{msg}}</i></p>
+      {% endfor %} {% endif %} {% endwith %}
+      
+      <p>Käyttääksesi palvelua kirjaudu sisään:</p>
       <form action="/login" method="POST">
+      <div class="login-container">
         <div class="username-container">
           <label for="username">Käyttäjänimi:</label>
           <input type="text" name="username" required />
@@ -83,20 +86,21 @@
           <input type="password" name="password" required />
         </div>
         <div class="login-button">
-          <input type="submit" value="Kirjaudu" />
+          <input class="nappi" type="submit" value="Kirjaudu" />
         </div>
+      </div>
       </form>
-    </div>
     <br />
     <p>Eikö sinulla ole tunnusta? Rekisteröidy tästä:</p>
     <a href="/registerinput">Rekisteröidy</a>
-
+    
     {% else %}
-
+    
     <div class="not-role-info">
-        <p>Ensimmäisellä käyttökerralla sinun täytyy kysyä käyttölupaa Joosefilta.</p>
+      <p>Ensimmäisellä käyttökerralla sinun täytyy kysyä käyttölupaa Joosefilta.</p>
     </div>
-
+    
     {% endif %}
+  </main>
   </body>
-</html>
+  </html>

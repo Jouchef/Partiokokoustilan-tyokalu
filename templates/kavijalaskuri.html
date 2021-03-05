@@ -5,89 +5,98 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}">
   </head>
 
-  <header class="header-container">
-    <tr>
-      <td><a href="/">kotisivulle</a></td>
-      <td>
-        Kirjautuneena: {{ session.username }}
-        <a href="/logout">Kirjaudu ulos</a>
-      </td>
-    </tr>
-
-    <h1>Kolon kävijälaskuri</h1>
-    {% with messages = get_flashed_messages() %} 
-    {% if messages %} 
-    <tr><td> 
-      {% for msg in messages %}
-      <p class="virheviesti"><i>{{msg}}</i></p>
-      {% endfor %} {% endif %} {% endwith %}
+  <body>
+    <header>
+      <div class="links-container">
+          <a class="logo-container" href="/">
+              <img class="logo" src="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}" alt="Rastipartio logo">
+          </a>
+          <nav>
+              <a href="/">kotisivulle</a>
+          </nav>
+      </div>
+      <div class="logout-container">
+          <p>Kirjautuneena: {{ session.username }}</p>
+          <a href="/logout">Kirjaudu ulos</a>
+      </div>
   </header>
 
-  <body>
-    <form action="/paivitakavijalaskuri" method="POST">
-      <table>
-        <tbody>
-            <tr>
-                <td><label for="ryhma">Ryhmä:</label></td>
-                <td>
-                    <input type="text" name=ryhma required minlength="1" maxlength="30" style="text-align: left;" value={{ryhma}}>
-                  </td>
+    <main>
+      <h1>Kolon kävijälaskuri</h1>
 
-            </tr>
-            <tr>
-                <td><label for="pvm">Pvm:</label></td>
-                <td>
-                    <input type="date" min="2021-01-01" max= {{dmy}} name="pvm" value= {{ dmy }} required>
-                  </td>
-            </tr>
-            <tr>
-                <td><label for="nuoria">Nuoria (0-28v.):</label></td>
-                <td>
-                    <input type="number" name="nuoria" required value={{ nuoria }} min="0" max="100" class="numero" style="width: 40px">
-                  </td>
-            </tr>
-            <tr>
-                <td><label for="aikuisia">Yli 28-vuotiaita:</label></td>
-                <td>
-                    <input type="number" name="aikuisia" required value={{ aikuisia }} min="0" max="100" class="numero" style="width: 40px">
-                  </td>
-            </tr>
-            <tr>
-                <td><label for="ulkopaikkakuntalainen">Joista ei helsinkiläisiä:</label></td>
-                <td>
-                    <input type="number" name="ulkopaikkakuntalainen" required value= {{ ulkopaikkakuntalainen }} min="0" max="100" class="numero" style="width: 40px">
-                  </td>
-            </tr>
-        </tbody>
-      </table>
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-      <input type="submit" value="Lähetä">
-    </form>
+      {% with messages = get_flashed_messages() %} 
+      {% if messages %} 
+        {% for msg in messages %}
+        <p class="virheviesti"><i>{{msg}}</i></p>
+        {% endfor %} {% endif %} {% endwith %}
 
-    <h2>Viimeiset 30 käyntiä:</h2>
-    <table class="taulukko">
+      <form action="/paivitakavijalaskuri" method="POST">
+        <table>
+          <tbody>
+            <tr>
+              <td><label for="ryhma">Ryhmä:</label></td>
+              <td>
+                <input type="text" name=ryhma required minlength="1" maxlength="30" style="text-align: left;" value={{ryhma}}>
+              </td>
+              
+            </tr>
+            <tr>
+              <td><label for="pvm">Pvm:</label></td>
+              <td>
+                <input type="date" min="2021-01-01" max= {{dmy}} name="pvm" value= {{ dmy }} required>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="nuoria">Nuoria (0-28v.):</label></td>
+              <td>
+                <input type="number" name="nuoria" required value={{ nuoria }} min="0" max="100" class="numero" style="width: 40px">
+              </td>
+            </tr>
+            <tr>
+              <td><label for="aikuisia">Yli 28-vuotiaita:</label></td>
+              <td>
+                <input type="number" name="aikuisia" required value={{ aikuisia }} min="0" max="100" class="numero" style="width: 40px">
+              </td>
+            </tr>
+            <tr>
+              <td><label for="ulkopaikkakuntalainen">Joista ei helsinkiläisiä:</label></td>
+              <td>
+                <input type="number" name="ulkopaikkakuntalainen" required value= {{ ulkopaikkakuntalainen }} min="0" max="100" class="numero" style="width: 40px">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Lähetä">
+      </form>
+      
+      <h2>Viimeiset 30 käyntiä:</h2>
+      <table class="taulukko">
         <thead>
-            <th>Ryhmä:</th>
-            <th>Pvm:</th>
-            <th>Alle 29-vuotias:</th>
-            <th>Yli 28-vuotias:</th>
-            <th>Ei Helsingistä:</th>
+          <th>Ryhmä:</th>
+          <th>Pvm:</th>
+          <th>Alle 29-vuotias:</th>
+          <th>Yli 28-vuotias:</th>
+          <th>Ei Helsingistä:</th>
         </thead>
         <tbody>
-            {% for kaynti in kaynnit %}
-
-            <tr>
-                <td> {{ kaynti[0] }} </td>
-                <td>{{ kaynti[1] }}</td>
-                <td>{{ kaynti[2] }}</td>
-                <td>{{ kaynti[3] }}</td>
-                <td>{{ kaynti[4] }}</td>
-            </tr>
-
-            {% endfor %}
+          {% for kaynti in kaynnit %}
+          
+          <tr>
+            <td> {{ kaynti[0] }} </td>
+            <td>{{ kaynti[1] }}</td>
+            <td>{{ kaynti[2] }}</td>
+            <td>{{ kaynti[3] }}</td>
+            <td>{{ kaynti[4] }}</td>
+          </tr>
+          
+          {% endfor %}
         </tbody>
-    </table>
-  </body>
+      </table>
+    </body>
+  </main>
 </html>
+    

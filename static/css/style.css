@@ -53,19 +53,12 @@ nav {
 }
 
 .login-container {
-  margin-top: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   height: 100px;
   justify-content:space-between;
-  background-color: red;
-}
-
-.username-container, .pw-container {
-  padding-block-start: 0 px;
-  padding-block-end: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .virheviesti {
@@ -139,14 +132,16 @@ background: #000000;
 border-radius: 4px;
 
 /*teksti*/
-font-weight: 800;
-font-size: 12px;
+font-weight: 900;
+font-size: 13px;
 color: #FFFFFF;
 }
 
 .nappi:hover {
-  color: red;
-  background: green;
+  opacity: 0.8;
   transform: translateY(2px);
-  border-radius: 500px;
+}
+
+.nappi a {
+  color:#FFFFFF;
 }

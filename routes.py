@@ -220,7 +220,13 @@ def paivitakavijalaskuri():
     nuoria = request.form["nuoria"]
     aikuisia = request.form["aikuisia"]
     ulkopaikkakuntalainen = request.form["ulkopaikkakuntalainen"]
-    if ulkopaikkakuntalainen < (nuoria + aikuisia):
+    print(int(nuoria) + int(aikuisia))
+    if int(nuoria) + int(aikuisia) < 1:
+        print("ulkopaikkakuntalainen: ", ulkopaikkakuntalainen, " nuoria: ", nuoria, " aikuisia: ", aikuisia)
+        flash("Lisää useampi kuin nolla osallistujaa.")
+        kaynnit = diary.getVisitors()
+        return render_template("kavijalaskuri.html", dmy=pvm, ryhma=ryhma, nuoria=nuoria, aikuisia=aikuisia, ulkopaikkakuntalainen=ulkopaikkakuntalainen, kaynnit=kaynnit)
+    if int(ulkopaikkakuntalainen) > (int(nuoria) + int(aikuisia)):
         print("ulkopaikkakuntalainen: ", ulkopaikkakuntalainen, " nuoria: ", nuoria, " aikuisia: ", aikuisia)
         flash("Ulkopaikkakuntalaisia ei voi olla enempää kuin kävijöitä yhteensä.")
         kaynnit = diary.getVisitors()

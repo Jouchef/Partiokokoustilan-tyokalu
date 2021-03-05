@@ -1,35 +1,44 @@
-<head>
-    <title>Uusi kalenterimerkintä</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-</head>
+<html>
 
-<header>
-    <table>
-        <tr>
-            <td> <a href="/">kotisivulle</a> </td>
-            <p>
-                Kirjautuneena: {{ session.username }}
+    <head>
+            <title>Uusi kalenterimerkintä</title>
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+        />
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}">
+    </head>
+
+    <body>
+        <header>
+            <div class="links-container">
+                <a class="logo-container" href="/">
+                    <img class="logo" src="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}" alt="Rastipartio logo">
+                </a>
+                <nav>
+                    <a href="/paivakirja">Päiväkirjaan</a>
+                </nav>
+            </div>
+            <div class="logout-container">
+                <p>Kirjautuneena: {{ session.username }}</p>
                 <a href="/logout">Kirjaudu ulos</a>
-              </p>
-            <td> <a href="/paivakirja">päiväkirjaan</a> </td>
-        </tr>
-    </table>
-    
-</header>
+            </div>
+        </header>
 
-<h1>Lisää uusi kalenterimerkintä</h1> <br>
+        <main>
+            <h1>Lisää uusi kalenterimerkintä</h1> <br>
 
-<form action="/lahetakmerkinta" method="POST">
-
-    <label for="merkinta">Kalenterimerkintä:</label><br>
-    <textarea id="1"name="merkinta" rows="2" cols="40" required minlength="8" maxlength="200"></textarea><br><br>
-
-    <label for="kirjoittaja">Kirjoittaja:</label><br>
-    <textarea id="2" name="kirjoittaja" rows="1" cols="40" required minlength="3" maxlength="15"></textarea><br><br>
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="Lähetä">
-</form>
+            <form action="/lahetakmerkinta" method="POST">
+                
+                <label for="merkinta">Kalenterimerkintä:</label><br>
+                <textarea id="1"name="merkinta" rows="2" cols="40" required minlength="8" maxlength="200"></textarea><br><br>
+                
+                <label for="kirjoittaja">Kirjoittaja:</label><br>
+                <textarea id="2" name="kirjoittaja" rows="1" cols="40" required minlength="3" maxlength="15"></textarea><br><br>
+                
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="submit" value="Lähetä">
+            </form>
+        </main>
+    </body>
+</html>
