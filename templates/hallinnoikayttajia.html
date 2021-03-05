@@ -1,48 +1,58 @@
+<html>
 
-<head>
-    <title>Käyttäjien hallinnointi</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-</head>
-
-<header class="header-container">
-    <tr>
-        <td><a href="/">kotisivulle</a></td>
-        <td>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a></td>
-    </tr>
+    <head>
+        <title>Käyttäjien hallinnointi</title>
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+        />
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}">
+    </head>
     
-    
-    <h1>Käyttäjien hallinnointi</h1>
-</header>
+    {% if session["role"] in ["sadmin", "admin"] %}
+    <body>
+        <header>
+            <div class="links-container">
+                <a class="logo-container" href="/">
+                    <img class="logo" src="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}" alt="Rastipartio logo">
+                </a>
+                <nav>
+                    <a href="/">kotisivulle</a>
+                </nav>
+            </div>
+            <div class="logout-container">
+                <p>Kirjautuneena: {{ session.username }}</p>
+                <a href="/logout">Kirjaudu ulos</a>
+            </div>
+        </header>
 
-{% if session["role"] in ["sadmin", "admin"] %}
-<body>
-    <summary>
-        <p><b>Super admin</b> voi hallita kaikkea sivulla</p>
-        <p><b>Admin</b> ei voi hallita käyttäjiä, mutta voi nähdä nämä tiedot.</p>
-        <p><b>User</b> ei voi näiden lisäksi muokata inventaariota tai poistaa kalenterimerkintöjä</p>
-        <p><b>User</b> voi luoda kalenterimerkintöjä ja tarkkailla inventaariota.</p>
-    </summary>
+        <main>
+            <h1>Käyttäjien hallinnointi</h1>
+            <summary>
+                <p><b>Super admin</b> voi hallita kaikkea sivulla</p>
+                <p><b>Admin</b> ei voi hallita käyttäjiä, mutta voi nähdä nämä tiedot.</p>
+                <p><b>User</b> ei voi näiden lisäksi muokata inventaariota tai poistaa kalenterimerkintöjä</p>
+                <p><b>User</b> voi luoda kalenterimerkintöjä ja tarkkailla inventaariota.</p>
+                <p><b>None</b> ei käyttöoikeuksia sivulle.</p>
+            </summary>
 
-    <table style="text-align: left;">
-        <th>
-            Käyttäjänimi:
-        </th>
-        <th>
-            Rooli:
-        </th>
-        {% if session["role"] in ["sadmin"] %}
-        <th>
-            Muuta rolea:
-        </th>
-        <th>
-            Poista käyttäjä:
-        </th>
-        {% endif %}
-        {% for kayttaja in tiedot %}
-            {% if kayttaja[0] != session["id"] %}
+            <table style="text-align: left;">
+                <th>
+                    Käyttäjänimi:
+                </th>
+                <th>
+                    Rooli:
+                </th>
+                {% if session["role"] in ["sadmin"] %}
+                <th>
+                    Muuta rolea:
+                </th>
+                <th>
+                    Poista käyttäjä:
+                </th>
+                {% endif %}
+                {% for kayttaja in tiedot %}
+                {% if kayttaja[0] != session["id"] %}
                 <tr>
                     <td>
                         {{ kayttaja[1] }}
@@ -51,32 +61,33 @@
                         {{ kayttaja[2] }}
                     </td>
                     {% if session["role"] in ["sadmin"] %}
-                        <td>
-                            <form action="/muutaroolia" method="POST">
-                                <input type="text" name="id" value={{ kayttaja[0] }} hidden>
-                                <select class="form-control" name="roolit" style="width: 100px;">
-                                    <option selected value={{ kayttaja[2] }}>{{ kayttaja[2] }}</option>
-                                    <option value="sadmin">sadmin</option>
-                                    <option value="admin">admin</option>
-                                    <option value="user">user</option>
-                                </select>
-                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                                <input type="submit" value="Muuta">
-                            </form>
-                        </td>
-                        <td>
-                            <form action="/poistakayttaja" method="POST">
-                                <input type="text" name="id" value={{ kayttaja[0] }} hidden>
-                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                                <input type="submit" value="Poista">
-                            </form>
-                        </td>
+                    <td>
+                        <form action="/muutaroolia" method="POST">
+                            <input type="text" name="id" value={{ kayttaja[0] }} hidden>
+                            <select class="form-control" name="roolit" style="width: 100px;">
+                                <option selected value={{ kayttaja[2] }}>{{ kayttaja[2] }}</option>
+                                <option value="sadmin">sadmin</option>
+                                <option value="admin">admin</option>
+                                <option value="user">user</option>
+                                <option value="">None</option>
+                            </select>
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            <input type="submit" value="Muuta">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/poistakayttaja" method="POST">
+                            <input type="text" name="id" value={{ kayttaja[0] }} hidden>
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            <input type="submit" value="Poista">
+                        </form>
+                    </td>
                     {% endif %}
                 </tr>
-            {% endif %}
-        {% endfor %}
-        {% for kayttaja in tiedot %}
-            {% if kayttaja[0] == session["id"] %}
+                {% endif %}
+                {% endfor %}
+                {% for kayttaja in tiedot %}
+                {% if kayttaja[0] == session["id"] %}
                 <tr>
                     <td>
                         {{ kayttaja[1] }}
@@ -88,8 +99,10 @@
                         <p><b>Ei voi muuttaa omaa roolia.</b></p>
                     </td>
                 </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
-</body>
-{% endif %}
+                {% endif %}
+                {% endfor %}
+            </table>
+        </main>
+    </body>
+    {% endif %}
+</html>

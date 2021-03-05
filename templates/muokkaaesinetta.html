@@ -1,52 +1,61 @@
-<head>
-    <title>Esineen muokkaus</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-  </head>
+<html>
 
-<header class="header-container">
-    <table>
-            <th>
-                <td>Kirjautuneena: {{ session.username }} <a href="/logout">Kirjaudu ulos</a></td>
-            </th>
-            <tr>
-                <td><a href="/">kotisivulle</a></td>
-                <td> <a href="/inventaario">takaisin inventaarioon</a> </td>
-            </tr>
-    </table>
-</header>
+    <head>
+            <title>Esineen muokkaus</title>
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+        />
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}">
+    </head>
 
-  <body>
-      <h1>Muokkaa tuotteen tietoja:</h1>
-    <form action="/paivitatuote" method="POST">
-        <table style="text-align: left;">
-            <thead>
-                <th>
-                    <label for="tuote">Tuote:</label>
-                </th>
-                <th>
-                    <label for="kuvaus">Kuvaus:</label>
-                </th>
-                <th>
-                    <label for="maara">Määrä:</label>
-                </th>
-            </thead>
-            <tr>
-                <td>
-                    <input type="text" name="tuote" value={{ rivi[0][0] }} required minlength="4" maxlength="20">
-                </td>
-                <td>
-                    <input type="text" name="kuvaus" value={{ rivi[0][1] }} required minlength="4" maxlength="30">
-                </td>
-                <td>
-                    <input type="number" name="maara" value={{ rivi[0][2] }} required min="0" max="200">
-                    <input type="number" name="id" value={{ rivi[0][3] }} hidden required>
-                </td>
-            </tr>
-        </table>
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="submit" value="Päivitä">
-    </form>
-  </body>
+    <body>
+        <header>
+            <div class="links-container">
+                <a class="logo-container" href="/">
+                    <img class="logo" src="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}" alt="Rastipartio logo">
+                </a>
+                <nav>
+                    <a href="/inventaario">takaisin inventaarioon</a>
+                </nav>
+            </div>
+            <div class="logout-container">
+                <p>Kirjautuneena: {{ session.username }}</p>
+                <a href="/logout">Kirjaudu ulos</a>
+            </div>
+        </header>
+
+        <main>
+            <h1>Muokkaa tuotteen tietoja:</h1>
+            <form action="/paivitatuote" method="POST">
+                <table style="text-align: left;">
+                    <thead>
+                        <th>
+                            <label for="tuote">Tuote:</label>
+                        </th>
+                        <th>
+                            <label for="kuvaus">Kuvaus:</label>
+                        </th>
+                        <th>
+                            <label for="maara">Määrä:</label>
+                        </th>
+                    </thead>
+                    <tr>
+                        <td>
+                            <input type="text" name="tuote" value={{ rivi[0][0] }} required minlength="4" maxlength="20">
+                        </td>
+                        <td>
+                            <input type="text" name="kuvaus" value={{ rivi[0][1] }} required minlength="4" maxlength="30">
+                        </td>
+                        <td>
+                            <input type="number" name="maara" value={{ rivi[0][2] }} required min="0" max="200">
+                            <input type="number" name="id" value={{ rivi[0][3] }} hidden required>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input class="nappi" type="submit" value="Päivitä">
+            </form>
+        </main>
+    </body>
+</html>
