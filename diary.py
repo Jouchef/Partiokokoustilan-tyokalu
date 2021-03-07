@@ -32,9 +32,7 @@ def getVisitorsByYear(vuosi):
     return kaynnit
 
 def getVisitorsAmountByYear(vuosi):
-    sql = "SELECT SUM(nuoria), SUM(aikuisia), SUM(ulkopaikkakuntalainen) FROM laskuri WHERE date_part('year', pvm) = :vuosi"
+    sql = "SELECT COALESCE(SUM(nuoria),0), COALESCE(SUM(aikuisia),0), COALESCE(SUM(ulkopaikkakuntalainen),0) FROM laskuri WHERE date_part('year', pvm) = :vuosi"
     tulos = db.session.execute(sql, {"vuosi": vuosi})
     maara = tulos.fetchall()
-    if (maara[0][0] is None):
-        return [(0,0,0)]
     return maara
