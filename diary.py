@@ -24,3 +24,17 @@ def updateVisitors(ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen):
     sql = "INSERT INTO laskuri (ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen) VALUES (:ryhma, :pvm, :nuoria, :aikuisia, :ulkopaikkakuntalainen)"
     db.session.execute(sql, {"ryhma": ryhma, "pvm": pvm, "nuoria": nuoria, "aikuisia": aikuisia, "ulkopaikkakuntalainen": ulkopaikkakuntalainen})
     db.session.commit()
+
+def getVisitorsByYear(vuosi):
+    sql = "SELECT ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen FROM laskuri WHERE date_part('year', pvm) = :vuosi"
+    tulos = db.session.execute(sql, {"vuosi": vuosi})
+    kaynnit = tulos.fetchall()
+    return kaynnit
+
+def getVisitorsAmountByYear(vuosi):
+    sql = "SELECT SUM(nuoria), SUM(aikuisia), SUM(ulkopaikkakuntalainen) FROM laskuri WHERE date_part('year', pvm) = :vuosi"
+    tulos = db.session.execute(sql, {"vuosi": vuosi})
+    maara = tulos.fetchall()
+    if (maara[0][0] is None):
+        return [(0,0,0)]
+    return maara

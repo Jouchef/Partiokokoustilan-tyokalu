@@ -70,8 +70,12 @@
           </tbody>
         </table>
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <input type="submit" value="Lähetä">
+        <input class="nappi" type="submit" value="Lähetä">
       </form>
+
+      <div style="margin-top: 20px;">
+        <a href="/haekavijalaskuri">Hae tästä tietyn vuoden yhteenvetoa</a>
+      </div>
       
       <h2>Viimeiset 30 käyntiä:</h2>
       <table class="taulukko">

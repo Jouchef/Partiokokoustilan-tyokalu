@@ -234,3 +234,21 @@ def paivitakavijalaskuri():
     diary.updateVisitors(ryhma, pvm, nuoria, aikuisia, ulkopaikkakuntalainen)
     flash("Kolokäynti lisätty onnistuneesti.")
     return redirect("/kavijalaskuri")
+
+
+@app.route("/haekavijalaskuri", methods=["GET"])
+@autGuard
+def haekavijalaskuri():
+    nyt = datetime.datetime.now()
+    vuosi = '{:02d}'.format(nyt.year)
+    kaynnit = diary.getVisitorsByYear(vuosi)
+    maara = diary.getVisitorsAmountByYear(vuosi)
+    return render_template("haekavijalaskuri.html", kaynnit=kaynnit, vuosi=vuosi, maara=maara)
+
+@app.route("/haevuodenkavijat", methods=["POST"])
+@autGuard
+def haevuodenkavijat():
+    vuosi = request.form["vuosi"]
+    kaynnit = diary.getVisitorsByYear(vuosi)
+    maara = diary.getVisitorsAmountByYear(vuosi)
+    return render_template("haekavijalaskuri.html", kaynnit=kaynnit, vuosi=vuosi, maara=maara)

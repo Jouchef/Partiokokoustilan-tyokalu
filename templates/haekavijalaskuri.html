@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <title>Hae kavijämäärä</title>
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}">
+  </head>
+
+  <body>
+    <header>
+      <div class="links-container">
+        <a class="logo-container" href="/">
+            <img class="logo" src="{{ url_for('static', filename='images/Rastipartiologo_pieni.png') }}" alt="Rastipartio logo">
+        </a>
+        <nav>
+            <a href="/">kotisivulle</a>
+            <a href="/kavijalaskuri">kävijälaskuriin</a>
+        </nav>
+      </div>
+      <div class="logout-container">
+          <p>Kirjautuneena: {{ session.username }}</p>
+          <a href="/logout">Kirjaudu ulos</a>
+      </div>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages() %} 
+        {% if messages %} 
+        {% for msg in messages %}
+        <p class="virheviesti"><i>{{msg}}</i></p>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <h2>Hae tietyn vuoden kävijät:</h2>
+
+        <form action="/haevuodenkavijat" method="POST">
+            <table>
+
+                <tr>
+                    <td>
+                        <label for="vuosi:">vuosi</label>
+                    </td>
+                    <td>
+                        <input id="vuosi" name="vuosi" type="number" min="2020" max="2030">
+                    </td>
+                    <td>
+                        <input class="nappi" type="submit" value="Hae">
+                    </td>
+            </table>
+            
+
+        </form>
+        
+        <h2>Merkityt käynnit vuodelta {{ vuosi }}</h2>
+        <table class="taulukko">
+          <thead>
+            <th>Ryhmä:</th>
+            <th>Pvm:</th>
+            <th>Alle 29-vuotias:</th>
+            <th>Yli 28-vuotias:</th>
+            <th>Ei Helsingistä:</th>
+          </thead>
+          <tbody>
+            {% for kaynti in kaynnit %}
+            
+            <tr>
+              <td> {{ kaynti[0] }} </td>
+              <td>{{ kaynti[1] }}</td>
+              <td>{{ kaynti[2] }}</td>
+              <td>{{ kaynti[3] }}</td>
+              <td>{{ kaynti[4] }}</td>
+            </tr>
+            
+            {% endfor %}
+
+            <tr>
+                <td></td>
+                <td>Yhteensä:</td>
+                <td> {{ maara[0][0] }} </td>
+                <td> {{ maara[0][1] }} </td>
+                <td> {{ maara[0][2] }} </td>
+            </tr>
+          </tbody>
+        </table>
+    </main>
+  </body>
+</html>
